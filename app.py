@@ -1,8 +1,10 @@
+import os
 import socket
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 hostname = socket.gethostname()
-IP = socket.gethostbyname(hostname)
+IP = os.environ['OPENSHIFT_PYTHON_IP']
+port = int(os.environ['OPENSHIFT_PYTHON_PORT'])
 
 class RH(BaseHTTPRequestHandler):
 	def do_GET(self):
@@ -18,7 +20,7 @@ class RH(BaseHTTPRequestHandler):
 		return
 
 def run():
-	server_address = (IP, 8080)
+	server_address = (IP, port)
 	httpd = HTTPServer(server_address, RH)
 	httpd.serve_forever()
 run()
